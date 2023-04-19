@@ -6,7 +6,7 @@ public class Test {
 
     @org.junit.Test
     public void test() {
-        String s = "inf  ";
-        System.out.println(s.indexOf(' '));
+        String s = "3.1416";
+        System.out.println(Double.parseDouble(s));
     }
 }
