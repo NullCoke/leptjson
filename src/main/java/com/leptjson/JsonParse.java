@@ -54,21 +54,44 @@ public class JsonParse {
     }
 
     ParseResult parseNumber(JsonContext c, LeptValue v) {
-        int i = c.json.indexOf(' ');
-        String num;
-        if (i == -1) {
-            num = c.json;
-            i = c.json.length();
-        } else {
-            num = c.json.substring(0, i);
+        int i = 0, len = c.json.length();
+        char[] s = c.json.toCharArray();
+        if (i < len && s[i] == '-') i++;
+        if (i < len && s[i] == '0') i++;
+        else {
+            if (i < len && !Numeric.isDigit1To9(s[i])) return ParseResult.PARSE_INVALID_VALUE;
+            i++;
+            while (i < len && Character.isDigit(s[i])) {
+                i++;
+            }
         }
-        if (!Numeric.validateNum(num)) {
-            return ParseResult.PARSE_INVALID_VALUE;
-        }
-        v.n = Double.parseDouble(num);
-        v.type = LeptType.NUMBER;
-        c.json = c.json.substring(i);
 
+        if (i < len && s[i] == '.') {
+            i++;
+            if (i < len && !Character.isDigit(s[i])) return ParseResult.PARSE_INVALID_VALUE;
+            i++;
+            while (i < len && Character.isDigit(s[i])) {
+                i++;
+            }
+        }
+
+        if (i < len && (s[i] == 'e' || s[i] == 'E')) {
+            i++;
+            if (i < len && (s[i] == '-' || s[i] == '+')) i++;
+            if (i < len && !Character.isDigit(s[i])) return ParseResult.PARSE_INVALID_VALUE;
+            i++;
+            while (i < len && Character.isDigit(s[i])) {
+                i++;
+            }
+        }
+        v.type = LeptType.NUMBER;
+        if (i >= len) {
+            v.n = Double.parseDouble(c.json);
+            c.json = "";
+        } else {
+            v.n = Double.parseDouble(c.json.substring(0, i));
+            c.json = c.json.substring(i);
+        }
         return ParseResult.PARSE_OK;
     }
 
