@@ -1,5 +1,7 @@
 package com.leptjson;
 
+import com.leptjson.utils.Numeric;
+
 public class JsonParse {
     public ParseResult parse(LeptValue v, String json) {
         JsonContext c = new JsonContext();
@@ -51,13 +53,24 @@ public class JsonParse {
         return ParseResult.PARSE_OK;
     }
 
+    ParseResult parseNumber(JsonContext c, LeptValue v) {
+        int i = Numeric.subNumber(c.json);
+        if (i == 0) {
+            return ParseResult.PARSE_INVALID_VALUE;
+        }
+        v.n = Double.parseDouble(c.json.substring(0, i));
+        v.type = LeptType.NUMBER;
+        c.json = c.json.substring(i);
+        return ParseResult.PARSE_OK;
+    }
+
     ParseResult ParseValue(JsonContext c, LeptValue v) {
         char prefix = c.json.charAt(0);
         return switch (prefix) {
             case 'n' -> parseNull(c, v);
             case 't' -> parseTrue(c, v);
             case 'f' -> parseFalse(c, v);
-            default -> ParseResult.PARSE_INVALID_VALUE;
+            default -> parseNumber(c, v);
         };
     }
 }

@@ -7,4 +7,9 @@ public class LeptValue {
     public LeptType getType() {
         return type;
     }
+
+    public double getNumber() {
+        assert type == LeptType.NUMBER;
+        return n;
+    }
 }
