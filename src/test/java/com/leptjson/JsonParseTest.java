@@ -3,8 +3,6 @@ package com.leptjson;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.leptjson.LeptValue.getType;
-
 public class JsonParseTest {
     JsonParse jp = new JsonParse();
 
@@ -14,7 +12,7 @@ public class JsonParseTest {
         v.type = LeptType.NULL;
         Assert.assertEquals(ParseResult.PARSE_OK, jp.parse(v, "null"));
         Assert.assertEquals(ParseResult.PARSE_ROOT_NOT_SINGULAR, jp.parse(v, "null x"));
-        Assert.assertEquals(LeptType.NULL, getType(v));
+        Assert.assertEquals(LeptType.NULL, v.getType());
     }
 
     @Test
@@ -22,7 +20,7 @@ public class JsonParseTest {
         LeptValue v = new LeptValue();
         v.type = LeptType.NULL;
         Assert.assertEquals(ParseResult.PARSE_OK, jp.parse(v, "true"));
-        Assert.assertEquals(LeptType.TRUE, getType(v));
+        Assert.assertEquals(LeptType.TRUE, v.getType());
     }
 
     @Test
@@ -30,7 +28,7 @@ public class JsonParseTest {
         LeptValue v = new LeptValue();
         v.type = LeptType.NULL;
         Assert.assertEquals(ParseResult.PARSE_OK, jp.parse(v, "false"));
-        Assert.assertEquals(LeptType.FALSE, getType(v));
+        Assert.assertEquals(LeptType.FALSE,v.getType());
     }
 
     @Test

@@ -2,8 +2,9 @@ package com.leptjson;
 
 public class LeptValue {
     LeptType type;
+    double n;
 
-    public static LeptType getType(LeptValue v) {
-        return v.type;
+    public LeptType getType() {
+        return type;
     }
 }
