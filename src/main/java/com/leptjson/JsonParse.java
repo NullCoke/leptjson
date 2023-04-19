@@ -54,13 +54,21 @@ public class JsonParse {
     }
 
     ParseResult parseNumber(JsonContext c, LeptValue v) {
-        int i = Numeric.subNumber(c.json);
-        if (i == 0) {
+        int i = c.json.indexOf(' ');
+        String num;
+        if (i == -1) {
+            num = c.json;
+            i = c.json.length();
+        } else {
+            num = c.json.substring(0, i);
+        }
+        if (!Numeric.validateNum(num)) {
             return ParseResult.PARSE_INVALID_VALUE;
         }
-        v.n = Double.parseDouble(c.json.substring(0, i));
+        v.n = Double.parseDouble(num);
         v.type = LeptType.NUMBER;
         c.json = c.json.substring(i);
+
         return ParseResult.PARSE_OK;
     }
 

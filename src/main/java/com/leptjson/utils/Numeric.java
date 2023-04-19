@@ -3,27 +3,22 @@ package com.leptjson.utils;
 import com.leptjson.JsonContext;
 
 public class Numeric {
-    public static int subNumber(String s) {
-        int i = 0;
-        boolean negative = false;
-        if (!Character.isDigit(s.charAt(0)) && s.charAt(0) != '-') {
-            return 0;
+    public static boolean validateNum(String s) {
+        char first = s.charAt(0);
+        char last = s.charAt(s.length() - 1);
+        if (!Character.isDigit(first) && first != '-') {
+            return false;
         }
-        if (s.charAt(0) == '-') {
-            negative = true;
-            i++;
+
+        if (last == '.') {
+            return false;
         }
-        int count = 0;
-        while (i < s.length() && count < 2) {
-            if (s.charAt(i) == '.') {
-                count++;
-                i++;
-            } else if (!Character.isDigit(s.charAt(i))) {
-                break;
-            } else {
-                i++;
-            }
+
+        try {
+            Double.parseDouble(s);
+        } catch (NumberFormatException e) {
+            return false;
         }
-        return i;
+        return true;
     }
 }
