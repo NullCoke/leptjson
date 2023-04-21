@@ -10,11 +10,12 @@ public class LeptValue {
     }
 
     public int getBool() {
-        return 0;
+        assert type == LeptType.TRUE || type == LeptType.FALSE;
+        return type == LeptType.TRUE ? 1 : 0;
     }
 
-    public void setBool() {
-
+    public void setBool(boolean b) {
+        type = b ? LeptType.TRUE : LeptType.FALSE;
     }
 
     public double getNumber() {
@@ -22,16 +23,18 @@ public class LeptValue {
         return n;
     }
 
-    public void setNumber(LeptValue v, double n) {
-
+    public void setNumber(double n) {
+        this.n = n;
+        type = LeptType.NUMBER;
     }
 
     public String getString() {
-        return this.s;
+        assert type == LeptType.STRING;
+        return s;
     }
 
-    public void setString(LeptValue v, String s) {
-        v.type = LeptType.STRING;
+    public void setString(String s) {
         this.s = s;
+        type = LeptType.STRING;
     }
 }
