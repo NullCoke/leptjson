@@ -9,7 +9,7 @@ public class JsonParse {
         c.json = json;
         v.type = LeptType.NULL;
         parseWhitespace(c);
-        if (ParseValue(c, v) == ParseResult.PARSE_OK) {
+        if (parseValue(c, v) == ParseResult.PARSE_OK) {
             ret = ParseResult.PARSE_OK;
             parseWhitespace(c);
             if (c.json.length() > 0) {
@@ -95,12 +95,28 @@ public class JsonParse {
         return ParseResult.PARSE_OK;
     }
 
-    ParseResult ParseValue(JsonContext c, LeptValue v) {
+    ParseResult parseString(JsonContext c, LeptValue v) {
+        String json = c.json;
+        int i = 1;
+        while (i < json.length()) {
+            if (json.charAt(i) == '\"' && json.charAt(i - 1) != '\\') {
+                break;
+            }
+            i++;
+        }
+        c.json = json.substring(i + 1);
+        v.type = LeptType.STRING;
+        v.s = json.substring(1, i);
+        return ParseResult.PARSE_OK;
+    }
+
+    ParseResult parseValue(JsonContext c, LeptValue v) {
         char prefix = c.json.charAt(0);
         return switch (prefix) {
             case 'n' -> parseNull(c, v);
             case 't' -> parseTrue(c, v);
             case 'f' -> parseFalse(c, v);
+            case '\"' -> parseString(c, v);
             default -> parseNumber(c, v);
         };
     }
